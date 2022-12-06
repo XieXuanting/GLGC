@@ -29,7 +29,7 @@ def get_distribution(measure, alpha, adj):
     """
     if measure == 'degree':
         # Degree-based distribution
-        proba = np.power(np.sum(adj, axis=0), alpha).tolist()[0]
+        proba = np.power(np.sum(adj, axis=0), alpha)
     elif measure == 'core':
         # Core-based distribution
         adj = sparse.csr_matrix(adj)
