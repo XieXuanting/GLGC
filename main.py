@@ -61,10 +61,9 @@ def FGC_cora_modified(X, A, gnd, a, k, ind):
     G_ = In
     X_hat = X
     for i in range(k):
-        # G_ = G_.dot(G)
         X_hat = G.dot(X_hat)
     begin_time = time()
-    # X_hat = G_.dot(X)
+
 
     # you can modify the order of f(A) here
     # default: f(A) = A
@@ -89,9 +88,9 @@ def main(X, A, gnd, m, a, k, ind):
     D = np.power(D, -0.5)
     D[np.isinf(D)] = 0
     D[np.isnan(D)] = 0
-    D = np.diagflat(D)  # (m,m)
+    D = np.diagflat(D)
 
-    S_hat = D.dot(S)  # (m,n)
+    S_hat = D.dot(S)
 
     S_hat_tmp = S_hat.dot(S_hat.T)  # (m,m)
     S_hat_tmp[np.isinf(S_hat_tmp)] = 0
@@ -123,7 +122,6 @@ def lower_bound(p, rd):
     l = 0
     r = len(p) - 1
     while(l < r):
-        # print("rd = {}, l = {}, r= {}".format(rd, l, r))
         mid = (l + r) // 2
         if(p[mid] > rd):
             r = mid
@@ -143,7 +141,6 @@ def node_sampling(A, m, alpha):
 
     for i in range(len(p) - 1):
         p[i + 1] = p[i + 1] + p[i]
-    # print(p)
     ind = []
     vis = [0] * len(D)
     while(m):
@@ -223,10 +220,8 @@ def func(X, A, gnd):
 
     tot += 1
 
-    for i in range(len(i_list)):
-        print("m = {},k = {},f_alpha = {}, ac_mean = {}, nm_mean = {}, f1_mean = {},tm_mean = {},tm_mean_filter ={}".format(
-            i_list[i], k_list[i], f_alpha_list[i], ac_list[i], nm_list[i], f1_list[i], tm_list[i], tm_list_filter[i]))
-    print("the best result is ")
+
+    print("the result is ")
     print("m = {},k = {},f_alpha = {}, ac_mean = {}, nm_mean = {}, f1_mean = {},tm_mean = {},tm_mean_filter = {}".format(
         i_list[xia], k_list[xia], f_alpha_list[xia], ac_list[xia], nm_list[xia], f1_list[xia], tm_list[xia], tm_list_filter[xia]))
     return i_list[xia], k_list[xia], f_alpha_list[xia], ac_list[xia], nm_list[xia], f1_list[xia], tm_list[xia], tm_list_filter[xia]
@@ -236,7 +231,7 @@ if __name__ == '__main__':
     dataset = 'cora'
     X, A, gnd = read_data(dataset)
     # number of epoch
-    tt = 2
+    tt = 1
     m_best_list = []
     k_best_list = []
     f_alpha_best_list = []
@@ -255,18 +250,4 @@ if __name__ == '__main__':
         f1_best_list.append(nowf1)
         tm_best_list.append(nowtm)
         tm_filter_best_list.append(nowtmf)
-        print("iteration {}, m = {}, k = {}, f_alpha = {}, ac = {}, nm = {}, f1 = {}, tm = {}, tm_filter = {}".format(
-            i + 1, nowm, nowk, nowf, nowac, nownm, nowf1, nowtm, nowtmf))
-    for i in range(len(ac_best_list)):
-        print("iteration {}, m = {}, k = {}, f_alpha = {}, ac = {}, nm = {}, f1 = {}, tm = {}, tm_filter = {}".format(
-            i + 1, m_best_list[i], k_best_list[i], f_alpha_best_list[i], ac_best_list[i], nm_best_list[i], f1_best_list[i], tm_best_list[i], tm_filter_best_list[i]))
-    print("ac_mean = {}, ac_std = {}".format(
-        np.mean(ac_best_list), np.std(ac_best_list, ddof=1)))
-    print("nm_mean = {}, nm_std = {}".format(
-        np.mean(nm_best_list), np.std(nm_best_list, ddof=1)))
-    print("f1_mean = {}, f1_std = {}".format(
-        np.mean(f1_best_list), np.std(f1_best_list, ddof=1)))
-    print("tm_mean = {}, tm_std = {}".format(
-        np.mean(tm_best_list), np.std(tm_best_list, ddof=1)))
-    print("tmf_mean = {}, tmf_std = {}".format(
-        np.mean(tm_filter_best_list), np.std(tm_filter_best_list, ddof=1)))
+
